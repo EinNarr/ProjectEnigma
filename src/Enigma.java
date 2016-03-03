@@ -92,12 +92,8 @@ public class Enigma {
 	}
 	public void setRotPos(int rotorLoc, int pos)
 	{
-		int temp[] = new int[26];
 		pos=pos%26;
-		for(int i=0;i<26;i++)
-			temp[i]=rotorList[rotorId[rotorLoc]][(i+pos)%26]-'A';//may optimize this with Linked Ring.
 		posRot[rotorLoc] = pos;
-		rotor[rotorLoc] = temp;
 	}
 	public char getChar(char c)
 	{
@@ -106,28 +102,30 @@ public class Enigma {
 		
 		rotateOnce();
 		
-		temp=rotor[2][temp];
-		temp=rotor[1][(26+temp-posRot[2])%26];
-		temp=rotor[0][(26+temp-posRot[1])%26];
+		temp=rotor[2][(26+temp+posRot[2])%26];
+		temp=rotor[1][(26+temp-posRot[2]+posRot[1])%26];
+		temp=rotor[0][(26+temp-posRot[1]+posRot[0])%26];
 
-		temp = reflector[temp];
-
+		temp = reflector[(26+temp-posRot[0])%26];
+		
 		for(int i=0;i<26;i++)
-			if(rotor[0][i]==temp)
+			if(rotor[0][i]==(temp+posRot[0])%26)
 			{
-				temp=i;
+				temp=(26+i-posRot[0])%26;
 				break;
 			}
+		
 		for(int i=0;i<26;i++)
 			if(rotor[1][i]==(temp+posRot[1])%26)
 			{
-				temp=(i)%26;
+				temp=(26+i-posRot[1])%26;
 				break;
 			}
+		
 		for(int i=0;i<26;i++)
 			if(rotor[2][i]==(temp+posRot[2])%26)
 			{
-				temp=(i)%26;
+				temp=(26+i-posRot[2])%26;
 				break;
 			}
 		
@@ -154,36 +152,6 @@ public class Enigma {
 	public static void main(String args[])
 	{
 		Enigma enigma = new Enigma();
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		System.out.print(enigma.getChar('A'));
-		
+		enigma.setRotPos(1, 'E'-'A');
 	}
 }
